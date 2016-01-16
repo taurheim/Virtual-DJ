@@ -10,6 +10,13 @@ var createLobby = function(lobbyUrl,lobbyName){
     newLobby.title = lobbyName;
     newLobby.namespace = io.of(lobbyUrl);
 
+    //Start the internal timer
+    newLobby.timer = setInterval(function(){
+        if(newLobby.queue[0]){
+            newLobby.queue[0].time++;
+        }
+    },1000);
+
     //Join a lobby
     newLobby.namespace.on("connection",function(socket){
         socket.on("join_lobby",function(user){
@@ -19,6 +26,10 @@ var createLobby = function(lobbyUrl,lobbyName){
 
             //Let everyone else know
             newLobby.namespace.emit("lobby",newLobby.users);
+
+            //Tell them what's playing
+            socket.emit("song",newLobby.queue[0]);
+            socket.emit("queue",newLobby.queue);
         });
 
         socket.on("disconnect", function(){

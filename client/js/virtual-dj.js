@@ -18,6 +18,15 @@ socket.on('connect', function () {
     socket.emit('join_lobby', "Guest");
 });
 
+socket.on('song', function(song){
+	if(song){
+		console.log("Playing song:");
+		console.log(song);
+		currentSong = song;
+		playVideo(song.url,song.time);
+	}
+});
+
 //Model for our song
 var Song = function (title, url) {
     this.title = title;
@@ -26,6 +35,7 @@ var Song = function (title, url) {
 
 var currentResults = [];
 var resultsDivs = [];
+var currentSong = {};
 
 //Makes a request to the Youtube API for a list of videos corresponding to the term
 function youtubeRequest(query) {
@@ -82,6 +92,8 @@ function clearResults() {
 }
 
 $('document').ready(function () {
+	loadYoutubeAPI();
+
     //Called on button press
     $('#addSongButton').click(function () {
 
