@@ -1,10 +1,15 @@
 var youtubeAPILoaded = false;
 var currentVideo = null;
 
-function playVideo(videoId){
+function playVideo(videoId,startTime){
     if(!youtubeAPILoaded){
         console.log("Youtube API not ready yet");
         loadYoutubeAPI();
+        setTimeout(function(){
+            playVideo(videoId,startTime);
+        },1000);
+    } else if(currentVideo){
+        currentVideo.loadVideoById(videoId,startTime);
     } else {
         currentVideo = new YT.Player('player', {
             height: '100%',
@@ -12,7 +17,8 @@ function playVideo(videoId){
             videoId: videoId,
             playerVars: {
                 'autoplay': 1,
-                'controls': 0
+                'controls': 1,
+                'start': startTime
             },
             events: {
                 'onStateChange': onPlayerStateChange
@@ -22,7 +28,7 @@ function playVideo(videoId){
 }
 
 function videoEnded(){
-    
+    socket.emit("song_ended",currentSong);
 }
 
 function onYouTubeIframeAPIReady() {
@@ -35,7 +41,7 @@ function onPlayerStateChange(event){
     if(event.data == YT.PlayerState.PAUSED) {
         currentVideo.playVideo();    
     } else if(event.data == YT.PlayerState.ENDED){
-
+        videoEnded();
     }
 }
 
