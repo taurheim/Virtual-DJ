@@ -15,15 +15,15 @@ virtualDJ.use(bodyParser.urlencoded({ extended: false }));
 //Public folder
 virtualDJ.use(express.static('client'));
 
-//Socket.io
-socketHandler.setupIO();
-
 //Start the server
 var server = http.Server(virtualDJ);
 
 server.listen("6969","127.0.0.1",function(){
     console.log("Virtual DJ started on port 6969");
 });
+
+//Socket.io
+socketHandler.setupIO(server);
 
 /*
  * Error handling

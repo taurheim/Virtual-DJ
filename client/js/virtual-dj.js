@@ -1,17 +1,17 @@
-var socket = io('localhost:6969');
+var socket = io("/default");
 
 socket.on('connect', function () {
-    socket.emit('join_lobby');
+    socket.emit('join_lobby',"Guest");
 });
 
 
 $('document').ready(function () {
     $('#addSongButton').click(function () {
-        socket.emit('addSong', $('#addSongInput').val());
+        socket.emit('add_song', $('#addSongInput').val());
         $('#addSongInput').val('');
     });
     $('#removeSongButton').click(function () {
-        socket.emit('removeSong');
+        socket.emit('remove_song');
     });
 
 });
