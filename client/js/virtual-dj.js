@@ -23,7 +23,7 @@ socket.on('song', function(song){
 });
 
 //Model for our song
-var Song = function (title, artist, url) {
+var Song = function (title, url) {
     this.title = title;
     this.url = url;
 }
@@ -77,10 +77,11 @@ function resultClicked(song) {
 }
 
 function clearResults() {
-	/*
-    for (i = 0; i < currentQueue.length; i++) {
-        currentQueue[i].remove();
-    }*/
+    for (i = 0; i < resultsDivs.length; i++) {
+        resultsDivs[i].remove();
+    }
+    resultsDivs = [];
+    $("youtubeSearch").val('');
 }
 
 $('document').ready(function () {
