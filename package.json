@@ -1,0 +1,23 @@
+{
+  "name": "virtual-dj",
+  "version": "0.0.1",
+  "description": "DeltaHacks project by Niko Savas and Joe Crozier",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taurheim/Virtual-DJ.git"
+  },
+  "author": "Niko Savas & Joe Crozier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/taurheim/Virtual-DJ/issues"
+  },
+  "homepage": "https://github.com/taurheim/Virtual-DJ#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "socket.io": "^1.4.4"
+  }
+}
