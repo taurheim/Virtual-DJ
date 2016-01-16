@@ -15,7 +15,11 @@ function handleClientLoad() {
         console.log("Loaded API");
     });
 }
+var socket = io("/default");
 
+socket.on('connect', function () {
+    socket.emit('join_lobby', "Guest");
+});
 
 
 //Makes a request to the Youtube API for a list of videos corresponding to the term
@@ -40,7 +44,7 @@ $('document').ready(function () {
 
     });
     $('#removeSongButton').click(function () {
-        socket.emit('removeSong');
+        socket.emit('remove_song');
     });
 
 
