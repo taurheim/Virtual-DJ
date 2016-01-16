@@ -18,6 +18,10 @@ socket.on('connect', function () {
     socket.emit('join_lobby', "Guest");
 });
 
+socket.on('song', function(song){
+	console.log(song);
+});
+
 //Model for our song
 var Song = function (title, artist, url) {
     this.title = title;
@@ -57,7 +61,7 @@ function populateSearchResults(results) {
         $(".thumbnail", "#result" + i).attr('src', results.items[i].snippet.thumbnails.default.url);
         $(".resultsTitle", "#result" + i).text(song.title);
         //Add a listener for the click event 
-        resultClicked.push($("#result" + i));
+        resultsDivs.push($("#result" + i));
         $('#result' + i).click(function () {
             var id = $(this).attr("id").split("result")[1];
             resultClicked(currentResults[id]);
@@ -72,10 +76,11 @@ function resultClicked(song) {
     clearResults();
 }
 
-function clearResults {
+function clearResults() {
+	/*
     for (i = 0; i < currentQueue.length; i++) {
         currentQueue[i].remove();
-    }
+    }*/
 }
 
 $('document').ready(function () {

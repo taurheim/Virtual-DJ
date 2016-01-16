@@ -19,6 +19,10 @@ var createLobby = function(lobbyUrl,lobbyName){
 
             //Let everyone else know
             newLobby.namespace.emit("lobby",newLobby.users);
+
+            //Tell them what's playing
+            socket.emit("song",newLobby.queue[0]);
+            socket.emit("queue",newLobby.queue);
         });
 
         socket.on("disconnect", function(){
