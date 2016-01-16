@@ -6,6 +6,10 @@
     <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="./js/virtual-dj.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <title>Virtual DJ</title>
 </head>
@@ -15,10 +19,10 @@
         <div id="titleBlock"></div>
         <div id="contentBlock"></div>
         <div id="queueBlock">
-            <input id="#addSongInput"></input>
-            <button id="#addSongButton">Add Song</button>
+            <input id="youtubeSearch"></input>
+            <button id="addSongButton">Add Song</button>
             <br>
-            <button id="#removeSongButton">Remove Song</button>
+            <div id="resultsBlock"></div>
         </div>
     </div>
 </body>
