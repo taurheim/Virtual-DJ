@@ -9,11 +9,8 @@
 var apiKey = 'AIzaSyAhXrhjnxe6eaiWIQgqUAvgch5TYR4TT0g';
 
 function handleClientLoad() {
-    console.log("client loadde");
     gapi.client.setApiKey(apiKey);
-    gapi.client.load('youtube', 'v3').then(function () {
-        console.log("Loaded API");
-    });
+    gapi.client.load('youtube', 'v3');
 }
 var socket = io("/default");
 
@@ -21,20 +18,64 @@ socket.on('connect', function () {
     socket.emit('join_lobby', "Guest");
 });
 
+//Model for our song
+var Song = function (title, artist, url) {
+    this.title = title;
+    this.url = url;
+}
+
+var currentResults = [];
+var resultsDivs = [];
 
 //Makes a request to the Youtube API for a list of videos corresponding to the term
 function youtubeRequest(query) {
 
     var request = gapi.client.youtube.search.list({
         q: query,
+        type: 'video',
         part: 'snippet'
     });
 
     request.execute(function (response) {
-        var str = JSON.stringify(response.result);
-        $('#resultsBlock').html('<pre>' + str + '</pre>');
+        console.log(response);
+        populateSearchResults(response);
     });
 
+}
+
+
+
+
+function populateSearchResults(results) {
+    for (i = 0; i < results.items.length; i++) {
+
+        var song = new Song(results.items[i].snippet.title,
+            results.items[i].id.videoId);
+        currentResults.push(song);
+        //Update the div with the search results
+        $("#resultDummy").clone().attr('id', 'result' + i).appendTo("#resultsBlock").show();
+        $(".thumbnail", "#result" + i).attr('src', results.items[i].snippet.thumbnails.default.url);
+        $(".resultsTitle", "#result" + i).text(song.title);
+        //Add a listener for the click event 
+        resultClicked.push($("#result" + i));
+        $('#result' + i).click(function () {
+            var id = $(this).attr("id").split("result")[1];
+            resultClicked(currentResults[id]);
+        })
+
+    }
+}
+
+
+function resultClicked(song) {
+    socket.emit('add_song', song);
+    clearResults();
+}
+
+function clearResults {
+    for (i = 0; i < currentQueue.length; i++) {
+        currentQueue[i].remove();
+    }
 }
 
 $('document').ready(function () {
@@ -43,6 +84,7 @@ $('document').ready(function () {
 
 
     });
+
     $('#removeSongButton').click(function () {
         socket.emit('remove_song');
     });
@@ -51,7 +93,6 @@ $('document').ready(function () {
     $("#youtubeSearch").autocomplete({
         //Populate the suggestions list
         source: function (request, response) {
-            console.log("test");
             var query = request.term;
             //Make a request to the youtube API for search terms
             $.ajax({

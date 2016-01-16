@@ -2,8 +2,9 @@ body {
     background-color: #b3e5fc;
 }
 #mainBlock {
-    height: 100vh;
+    height: 90vh;
     width: 100vw;
+    max-width: 100%;
 }
 #titleBlock {}
 #contentBlock {
@@ -17,6 +18,27 @@ body {
     height: 70%;
     width: 30%;
     float: right;
-    padding-right: 2em;
     background-color: white;
+}
+
+/* Search results */
+
+#resultsBlock {
+    overflow: scroll;
+    margin-top: 1em;
+    max-height: 95%;
+}
+.result {
+    height: 10em;
+    padding: 1em;
+    cursor: pointer;
+}
+.result:hover {
+    background-color: #ebebeb;
+}
+.thumbnail {
+    float: left;
+    height: 80%;
+    padding-left: 1em;
+    padding-right: 1em;
 }

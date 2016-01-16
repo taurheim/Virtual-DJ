@@ -3,7 +3,7 @@ var io = require("socket.io");
 var lobbyManager = require("./lobbyManager.js");
 var queueManager = require("./queueManager.js");
 
-var setupIO = function(server){
+var setupIO = function (server) {
     console.log("Setting up sockets...");
 
     io = io(server);
