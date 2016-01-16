@@ -18,13 +18,13 @@ socket.on('connect', function () {
     socket.emit('join_lobby', "Guest");
 });
 
-socket.on('song', function(song){
-	if(song){
-		console.log("Playing song:");
-		console.log(song);
-		currentSong = song;
-		playVideo(song.url,song.time);
-	}
+socket.on('song', function (song) {
+    if (song) {
+        console.log("Playing song:");
+        console.log(song);
+        currentSong = song;
+        playVideo(song.url, song.time);
+    }
 });
 
 //Model for our song
@@ -87,12 +87,13 @@ function clearResults() {
     for (i = 0; i < resultsDivs.length; i++) {
         resultsDivs[i].remove();
     }
+    currentResults = [];
     resultsDivs = [];
     $("#youtubeSearch").val('');
 }
 
 $('document').ready(function () {
-	loadYoutubeAPI();
+    loadYoutubeAPI();
 
     //Called on button press
     $('#addSongButton').click(function () {
