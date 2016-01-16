@@ -2,6 +2,9 @@ var express = require("express");
 var http = require("http");
 var bodyParser = require("body-parser");
 
+//Our managers
+var socketHandler = require("./server/socketHandler.js");
+
 
 var virtualDJ = express();
 
@@ -13,6 +16,7 @@ virtualDJ.use(bodyParser.urlencoded({ extended: false }));
 virtualDJ.use(express.static('client'));
 
 //Socket.io
+socketHandler.setupIO();
 
 //Start the server
 var server = http.Server(virtualDJ);
