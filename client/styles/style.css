@@ -1,24 +1,54 @@
 body {
-    background-color: #b3e5fc;
+    background-color: #232323;
 }
 #mainBlock {
     height: 90vh;
     width: 100vw;
     max-width: 100%;
 }
-#titleBlock {}
+#titleBlock {
+    width: 100%;
+    height: 20%;
+    text-align: center;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    font-size: 6em;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    color: #a2a1a1;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url('../music-background.png')
+}
 #contentBlock {
     height: 70%;
     width: 55%;
-    float: left;
-    padding-left: 2em;
-    background-color: white;
+    float: right;
+    margin-right: 2em;
+    background-color: #9c978d;
 }
+
+/* Queue block*/
+
 #queueBlock {
     height: 70%;
-    width: 30%;
-    float: right;
-    background-color: white;
+    width: 29%;
+    margin-right: -0.1em;
+    float: left;
+    margin-left: 2em;
+    background-color: #9c978d;
+}
+#queueMenu {
+    background-color: #5b797a;
+}
+.queueMenuItem {
+    display: inline-block;
+    width: 33%;
+    height: 10%;
+    text-align: center;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 }
 
 /* Search results */

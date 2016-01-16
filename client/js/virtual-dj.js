@@ -68,6 +68,7 @@ function populateSearchResults(results) {
 
 
 function resultClicked(song) {
+    console.log(song);
     socket.emit('add_song', song);
     clearResults();
 }
@@ -77,7 +78,7 @@ function clearResults() {
         resultsDivs[i].remove();
     }
     resultsDivs = [];
-    $("youtubeSearch").val('');
+    $("#youtubeSearch").val('');
 }
 
 $('document').ready(function () {

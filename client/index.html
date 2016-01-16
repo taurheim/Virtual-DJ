@@ -8,7 +8,7 @@
     <script src="./js/virtual-dj.js"></script>
     <script src="./js/video-player.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
@@ -17,9 +17,16 @@
 
 <body>
     <div id="mainBlock">
-        <div id="titleBlock"></div>
-        <div id="contentBlock"><div id="player"></div></div>
+        <div id="titleBlock">Virtual DJ</div>
+        <div id="contentBlock">
+            <div id="player"></div>
+        </div>
         <div id="queueBlock">
+            <div id="queueMenu">
+                <div class="queueMenuItem" id="item1">Queue</div>
+                <div class="queueMenuItem" id="item1">Room</div>
+                <div class="queueMenuItem" id="item1">History</div>
+            </div>
             <input id="youtubeSearch"></input>
             <button id="addSongButton">Add Song</button>
             <br>
