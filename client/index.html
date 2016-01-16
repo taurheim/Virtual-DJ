@@ -6,6 +6,7 @@
     <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="./js/virtual-dj.js"></script>
+    <script src="./js/video-player.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -17,7 +18,7 @@
 <body>
     <div id="mainBlock">
         <div id="titleBlock"></div>
-        <div id="contentBlock"></div>
+        <div id="contentBlock"><div id="player"></div></div>
         <div id="queueBlock">
             <input id="youtubeSearch"></input>
             <button id="addSongButton">Add Song</button>

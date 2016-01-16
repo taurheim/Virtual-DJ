@@ -21,6 +21,18 @@ var createLobby = function(lobbyUrl,lobbyName){
             newLobby.namespace.emit("lobby",newLobby.users);
         });
 
+        socket.on("disconnect", function(){
+            for(var i=0;i<newLobby.users.length;i++){
+                if(newLobby.users[i] == socket.user) {
+                    newLobby.users.splice(i,1);
+                }
+            }
+            console.log(socket.user + " left - " + newLobby.users);
+
+            //Let everyone else know
+            newLobby.namespace.emit("lobby",newLobby.users);
+        });
+
         //Let the socket pay attention to the queue of songs
         queueManager.manage(socket,newLobby);
     });

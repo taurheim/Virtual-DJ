@@ -89,7 +89,6 @@ $('document').ready(function () {
         socket.emit('remove_song');
     });
 
-
     $("#youtubeSearch").autocomplete({
         //Populate the suggestions list
         source: function (request, response) {
