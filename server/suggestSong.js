@@ -26,11 +26,15 @@ var searchForTrack = function(keywords){
             limit: 1,
             handlers: {
                 success: function(data) {
-                    console.log("Found: " + newKeywords + " --> " + data.results.trackmatches.track[0].mbid);
-                    callback(null,data.results.trackmatches.track[0]);
+                    if(data.results.trackmatches.length){
+                        console.log("Found: " + newKeywords + " --> " + data.results.trackmatches.track[0].mbid);
+                        callback(null,data.results.trackmatches.track[0]);
+                    } else {
+                        callback();
+                    }
                 },
                 error: function(error) {
-                    console.log("Error: " + error.message);
+                    console.log("Error 1: " + error.message);
                     callback(error);
                 }
             }
@@ -192,11 +196,11 @@ function canSuggest(queue,callback){
     }
     async.parallel(findSongFunctions,function(err,results){
         if(err){
-            return console.log("Error: " + err);
+            return console.log("Error 2: " + err);
         }
         var mbid_matches = 0;
         for(var i=0;i<results.length;i++){
-            if(results[i].mbid){
+            if(results[i] && results[i].mbid){
                 mbid_matches++;
             }
         }

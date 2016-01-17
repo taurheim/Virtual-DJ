@@ -2,7 +2,7 @@ var Song = require("./models/Song");
 var User = require("./models/User");
 var suggestSong = require("./suggestSong");
 
-var addSongToLobby = function(song,lobby){
+var addSongToLobby = function(song,lobby,user,callback){
     var f = suggestSong.searchForTrack(song.title);
 
     f(function(err,result){
@@ -16,7 +16,7 @@ var addSongToLobby = function(song,lobby){
         }
         newSong.url = song.url;
         newSong.time = 0;
-        newSong.suggested_by = socket.user;
+        newSong.suggested_by = user;
         lobby.queue.push(newSong);
         console.log("Song added: "+ newSong.title + " - " + lobby.queue.length);
         //If it's the first song, start playing
@@ -26,6 +26,8 @@ var addSongToLobby = function(song,lobby){
 
         //Let everyone else know
         lobby.namespace.emit("queue",lobby.queue);
+
+        if(callback) callback();
 
         if(!lobby.suggestTimer){
             //Let's see if we can suggest yet
@@ -93,12 +95,10 @@ var manage = function(socket,lobby){
         console.log("Attempting to suggest a song...");
         suggestSong.suggestSong(lobby.queue, function(newSong){
             console.log("Added song: " + newSong.title + " by " + newSong.artist);
-            newSong.suggested_by = new User();
-            newSong.suggested_by.name = "Virtual DJ";
-            newSong.suggested_by.color = "#c66748";
-            newSong.time = 0;
-            lobby.queue.push(newSong);
-            lobby.namespace.emit("queue", lobby.queue);
+            var virtualDJ = new User();
+            virtualDJ.name = "Virtual DJ";
+            virtualDJ.color = "#c66748";
+            addSongToLobby(newSong,lobby,virtualDJ);
         });
     });
 }
