@@ -21,8 +21,7 @@ var setup = function (io, lobby) {
 
     });
     bot.on('message', function (message) {
-        if (message.type == "message" && message.user != "U0JLMJYSH") {
-            console.log(message);
+        if (message.type == "message" && message.user != bot.self.id) {
             var text = message.text;
             //Make a YouTube request using that message
 
@@ -31,24 +30,20 @@ var setup = function (io, lobby) {
             youTube.search(text, 5, function (error, result) {
                 var title = result.items[0].snippet.title;
                 var options = {
-                    username: "virtualdj",
                     as_user: true
                 };
                 var newSong = new Song();
                 newSong.title = title;
-                newSong.url = result.items[0].id.videoId
-                
+                newSong.url = result.items[0].id.videoId;
                 //Tell the user we're adding that song
-                bot.postMessage(message.user, "Adding song: " + title, options, function (data) {
-                });
+                bot.postMessage(message.user, "Adding song: " + title,options);
                 
                 //We succeeded, now tell the lobbyManager to play it
                 var DJBot = new User();
                 DJBot.name = "DJBot";
                 DJBot.color = "#000000";
                 queueManager.addSongToLobby(newSong, lobby, DJBot, function(){
-                    console.log("YOOOOO");
-                console.log(lobby.queue);
+                    console.log("Slack bot successfully added a song.");
                 });
             });
 

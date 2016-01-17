@@ -17,8 +17,9 @@ virtualDJ.use(express.static('client'));
 
 //Start the server
 var server = http.Server(virtualDJ);
-
-server.listen("6969","127.0.0.1",function(){
+var APP_PORT = process.env.OPENSHIFT_NODEJS_PORT || 6969;
+var APP_IP = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+server.listen(APP_PORT,APP_IP,function(){
     console.log("Virtual DJ started on port 6969");
 });
 

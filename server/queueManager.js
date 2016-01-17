@@ -7,8 +7,7 @@ var addSongToLobby = function(song,lobby,user,callback){
 
     f(function(err,result){
         var newSong = new Song();
-        if(!err){
-            console.log(result);
+        if(!err && result){
             newSong.title = result.name;
             newSong.artist = result.artist;
         } else {
@@ -56,7 +55,7 @@ var manage = function(socket,lobby){
     console.log("Queue Manager is now managing " + lobby.title);
     socket.on("add_song",function(song){
         if(!song){return;}
-        addSongToLobby(song,lobby);
+        addSongToLobby(song,lobby,socket.user);
     });
 
     socket.on("remove_song",function(song){

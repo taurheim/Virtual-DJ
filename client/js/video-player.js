@@ -27,8 +27,16 @@ function playVideo(videoId, startTime) {
     }
 }
 
+function stopPlayingVideo(){
+    $("#player").remove();
+    $("#videoTitle").html("");
+    $("#contentBlock").append("<div id='player'></div>");
+    currentVideo = null;
+}
+
 function videoEnded() {
     socket.emit("song_ended", currentSong);
+    stopPlayingVideo();
 }
 
 function onYouTubeIframeAPIReady() {

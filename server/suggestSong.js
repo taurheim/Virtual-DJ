@@ -18,15 +18,17 @@ var searchForTrack = function(keywords){
         var newKeywords = keywords;
         for(var i=0;i<removeWords.length;i++){
             newKeywords = newKeywords.toLowerCase();
-            newKeywords = newKeywords.replace("-"," ");
             newKeywords = newKeywords.replace(removeWords[i],"");
         }
+        newKeywords = newKeywords.replace("-"," ");
+        newKeywords = newKeywords.replace(/\s+/g, " ");
+        console.log("Searching for " + newKeywords);
         var request = lastfm.request("track.search", {
             track: newKeywords,
             limit: 1,
             handlers: {
                 success: function(data) {
-                    if(data.results.trackmatches.length){
+                    if(data.results.trackmatches.track){
                         console.log("Found: " + newKeywords + " --> " + data.results.trackmatches.track[0].mbid);
                         callback(null,data.results.trackmatches.track[0]);
                     } else {

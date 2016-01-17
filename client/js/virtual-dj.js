@@ -48,6 +48,10 @@ socket.on('queue', function (queue) {
     clearQueue();
     currentQueue = queue;
     populateQueue(queue);
+
+    if(!queue.length){
+        stopPlayingVideo();
+    }
 });
 
 socket.on('lobby', function (lobby) {
