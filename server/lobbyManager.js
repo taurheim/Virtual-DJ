@@ -10,13 +10,6 @@ var createLobby = function(lobbyUrl,lobbyName){
     newLobby.title = lobbyName;
     newLobby.namespace = io.of(lobbyUrl);
 
-    //Start the internal timer
-    newLobby.timer = setInterval(function(){
-        if(newLobby.queue[0]){
-            newLobby.queue[0].time++;
-        }
-    },1000);
-
     //Join a lobby
     newLobby.namespace.on("connection",function(socket){
         socket.on("join_lobby",function(user){
@@ -28,6 +21,15 @@ var createLobby = function(lobbyUrl,lobbyName){
             }
             socket.user = user;
             newLobby.users.push(user);
+
+            if(newLobby.users.length==1){
+                //Start the internal timer
+                newLobby.timer = setInterval(function(){
+                    if(newLobby.queue[0]){
+                        newLobby.queue[0].time++;
+                    }
+                },1000);
+            }
             
 
             //Let everyone else know
@@ -48,6 +50,11 @@ var createLobby = function(lobbyUrl,lobbyName){
 
             //Let everyone else know
             newLobby.namespace.emit("lobby",newLobby.users);
+
+            if(!newLobby.users.length){
+                //If nobody is in the room, pause the timer
+                clearInterval(newLobby.timer);
+            }
         });
 
         //Let the socket pay attention to the queue of songs

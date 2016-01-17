@@ -143,12 +143,21 @@ function clearResults() {
 
 $('document').ready(function () {
     loadYoutubeAPI();
-
+    //Login
     $("#ok").on("click",function(){
     	$("#leftBlock").css("display","inline");
     	$("#loginBlock").css("display","none");
     	currentUser = $("#username").val();
     	socket.emit('join_lobby', currentUser);
+    });
+    //Perform search on Enter
+    $('#username').keyup(function (e) {
+        if (e.keyCode == 13) {
+            $("#leftBlock").css("display","inline");
+            $("#loginBlock").css("display","none");
+            currentUser = $("#username").val();
+            socket.emit('join_lobby', currentUser);
+        }
     });
 
     //Menu selection buttons

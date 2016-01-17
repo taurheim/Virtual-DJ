@@ -51,7 +51,9 @@ body {
     float: left;
     margin-left: 2em;
     background-color: #9c978d;
+    min-width:215px;
 }
+
 #leftBlock {
     display:none;
 }
@@ -86,6 +88,41 @@ body {
 #suggestButton {
     font-size: 5vh;
     float: left;
+}
+/* Login block */
+
+#loginBlock {
+    font-family:'Lato', sans-serif;
+    font-size: 24px;
+    display:flex;
+    justify-content: center;
+}
+
+#loginBlock #loginForm {
+    align-self:center;
+    text-align:center;
+    margin-top:-40px;
+}
+
+#loginBlock input {
+    margin-top:10px;
+    margin-left:auto;
+    margin-right:auto;
+    height:30px;
+    display:block;
+    border:0 none;
+    font-size:26px;
+    text-align:center;
+    background-color: #ddd;
+    width:90%;
+}
+
+#loginBlock #ok {
+    color:#0000;
+    margin-top:10px;
+    margin-left:auto;
+    margin-right:auto;
+    display: block;
 }
 
 /* Queue block */
