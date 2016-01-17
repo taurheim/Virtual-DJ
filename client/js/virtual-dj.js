@@ -127,6 +127,8 @@ function populateSearchResults(results) {
 
 function resultClicked(song) {
     $("#searchBlock").slideToggle();
+    $("#leftContent").css("height", "80%");
+    $("#searchBlock").show();
     $("#queueBlock").show();
     console.log(song);
     socket.emit('add_song', song);
@@ -169,33 +171,33 @@ $('document').ready(function () {
 
     //Queue button
     $("#item1").on('click', function () {
-        console.log("Working");
         $("#roomBlock").hide();
-        $("#historyBlock").hide();
+        $("#addButtonDiv").show();
         $("#searchBlock").hide();
         $("#queueBlock").show();
     });
     //Room button
     $("#item2").on('click', function () {
         $("#queueBlock").hide();
-        $("#historyBlock").hide();
+        $("#addButtonDiv").hide();
         $("#searchBlock").hide();
         $("#roomBlock").show();
     });
-    //History button
-    $("#item3").on('click', function () {
-        $("#roomBlock").hide();
-        $("#queueBlock").hide();
-        $("#searchBlock").hide();
-        $("#historyBlock").show();
-    });
     //Add button
     $("#addButton").click(function () {
+        $("#leftContent").css("height", "100%");
+        $("#searchBlock").hide();
         $("#searchBlock").slideToggle();
         $("#roomBlock").hide();
         $("#queueBlock").hide();
-        $("#historyBlock").hide();
     });
+    //Close song add Button
+    $("#closeButton").click(function () {
+        $("#searchBlock").slideToggle();
+        $("#queueBlock").show();
+        $("#leftContent").css("height", "80%");
+
+    })
 
     $("#suggestButton").click(function () {
         socket.emit('suggest_song');

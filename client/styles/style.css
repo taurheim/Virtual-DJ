@@ -53,10 +53,12 @@ body {
     margin-left: 2em;
     background-color: #9c978d;
     min-width:215px;
+    overflow: hidden
 }
 
 #leftBlock {
     display: none;
+    position: relative;
 }
 #leftMenu {
     width: 100%;
@@ -76,18 +78,18 @@ body {
     font-family: 'Lato', sans-serif;
 }
 #addButtonDiv {
-    height: 10%;
     width: 100%;
+    position: absolute;
+    bottom: 0;
     color: #252525;
 }
 #addButton {
-    font-size: 5vh;
     float: right;
 }
 #suggestButton {
-    font-size: 5vh;
     float: left;
 }
+
 /* Login block */
 
 #loginBlock {
@@ -123,6 +125,11 @@ body {
     margin-right:auto;
     display: block;
 }
+#addButton,
+#suggestButton {
+    line-height: 80%;
+    padding: 2em;
+}
 
 /* Queue block */
 
@@ -149,11 +156,19 @@ body {
 
 #searchBlock {
     height: 100%;
+    background-color: #eeeeee;
 }
 #resultsBlock {
     height: 80%;
     overflow-y: auto;
     margin-top: 1em;
+}
+#closeButton {
+    color: #9c978d;
+    font-size: 3vh;
+    padding: 0px !important;
+    float: right;
+    margin: 10px;
 }
 .result {
     height: 5em;
