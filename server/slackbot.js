@@ -36,15 +36,29 @@ var setup = function (io, lobby) {
                 newSong.title = title;
                 newSong.url = result.items[0].id.videoId;
                 //Tell the user we're adding that song
-                bot.postMessage(message.user, "Adding song: " + title,options);
-                
+                bot.postMessage(message.user, "Adding song: " + title, options);
+
                 //We succeeded, now tell the lobbyManager to play it
                 var DJBot = new User();
-                DJBot.name = "DJBot";
-                DJBot.color = "#000000";
-                queueManager.addSongToLobby(newSong, lobby, DJBot, function(){
-                    console.log("Slack bot successfully added a song.");
+
+                //Get the list of users
+                bot.getUsers().then(function (data) {
+                    var users = data.members;
+                    DJBot.name = "Slack";
+                    for (var i = 0; i < users.length; i++) {
+                        var user = users[i];
+                        if (user.id === message.user) {
+                            DJBot.name = user.name;
+                            DJBot.color = '#' + user.color;
+                        }
+                    }
+
+                    queueManager.addSongToLobby(newSong, lobby, DJBot, function () {
+                        console.log("Slack bot successfully added a song.");
+                    });
                 });
+
+
             });
 
         }
