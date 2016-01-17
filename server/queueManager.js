@@ -30,7 +30,7 @@ var addSongToLobby = function(song,lobby,user,callback){
 
         if(!lobby.suggestTimer){
             //Let's see if we can suggest yet
-            suggestSong.canSuggest(lobby.queue,function(err,can){
+            suggestSong.canSuggest(lobby.queue.concat(lobby.history),function(err,can){
                 if(can){
                     console.log("Starting to suggest songs");
                     lobby.suggestTimer = setInterval(function(){

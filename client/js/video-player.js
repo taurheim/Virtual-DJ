@@ -17,7 +17,7 @@ function playVideo(videoId, startTime) {
             videoId: videoId,
             playerVars: {
                 'autoplay': 1,
-                'controls': 1,
+                'controls': 0,
                 'start': startTime
             },
             events: {
