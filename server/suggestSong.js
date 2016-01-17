@@ -12,23 +12,31 @@ var lastfm = new LastFmNode({
 });
 
 
-var removeWords = ["(lyrics)","lyrics","(LYRICS)","(Lyrics)"]
+var removeWords = ["lyrics",/\([^)]*\)/, "hq"]
 var searchForTrack = function(keywords){
     return function(callback){
         var newKeywords = keywords;
         for(var i=0;i<removeWords.length;i++){
+            newKeywords = newKeywords.toLowerCase();
             newKeywords = newKeywords.replace(removeWords[i],"");
         }
+        newKeywords = newKeywords.replace("-"," ");
+        newKeywords = newKeywords.replace(/\s+/g, " ");
+        console.log("Searching for " + newKeywords);
         var request = lastfm.request("track.search", {
-            track: keywords,
+            track: newKeywords,
             limit: 1,
             handlers: {
                 success: function(data) {
-                    console.log("Found: " + newKeywords + " --> " + data.results.trackmatches.track[0].mbid);
-                    callback(null,data.results.trackmatches.track[0]);
+                    if(data.results.trackmatches.track){
+                        console.log("Found: " + newKeywords + " --> " + data.results.trackmatches.track[0].mbid);
+                        callback(null,data.results.trackmatches.track[0]);
+                    } else {
+                        callback();
+                    }
                 },
                 error: function(error) {
-                    console.log("Error: " + error.message);
+                    console.log("Error 1: " + error.message);
                     callback(error);
                 }
             }
@@ -36,22 +44,28 @@ var searchForTrack = function(keywords){
     }
 }
 
-var findRelatedSongs = function(mbid){
+var findRelatedSongs = function(track){
     return function(callback){
         //console.log("Finding related songs to: " + mbid);
-        var request = lastfm.request("track.getSimilar", {
-            mbid: mbid,
+
+        var requestParams = {
             handlers: {
                 success: function(data) {
-                    console.log("Found " + data.similartracks.track.length + " songs related to " + mbid);
+                    console.log("Found " + data.similartracks.track.length + " songs related to " + track.name);
                     callback(null,data.similartracks);
                 },
                 error: function(error) {
                     console.log("Error: " + error.message);
                     callback(error);
                 }
-            }
-        });
+            },
+            track: track.name,
+            artist: track.artist
+        };
+        if(track.mbid){
+            requestParams["mbid"] = track.mbid;
+        }
+        var request = lastfm.request("track.getSimilar",requestParams);
     }
 }
 
@@ -66,6 +80,13 @@ var suggestSong = function(queue,callback){
             console.log("ERROR: " + err);
         }
 
+        //Make sure we found at least one song
+        if(!foundSongs.length){
+            return;
+        } else {
+            console.log("Found " + foundSongs.length + " songs");
+        }
+
         //So that we don't duplicate
         var foundArtists = [];
         var foundSongTitles = [];
@@ -75,9 +96,15 @@ var suggestSong = function(queue,callback){
             if(foundSongs[i] && foundSongs[i].mbid){
                 foundArtists.push(foundSongs[i].artist);
                 foundSongTitles.push(foundSongs[i].name);
-                similarSongFunctions.push(findRelatedSongs(foundSongs[i].mbid));
+                similarSongFunctions.push(findRelatedSongs(foundSongs[i]));
             }
         }
+
+        if(!similarSongFunctions.length){
+            console.log("Couldn't find any songs related to the queue");
+            return;
+        }
+
         async.parallel(similarSongFunctions,function(err,results){
             if(err){
                 console.log("ERROR: " + err);
@@ -102,8 +129,9 @@ var suggestSong = function(queue,callback){
             var pickBetweenTop = 10;
 
             mostMatched(pickBetweenTop,resultStrings,function(suggestionArray){
+                console.log(suggestionArray);
                 var pickedSong = suggestionArray[Math.floor((Math.random() * pickBetweenTop))];
-                //console.log("I suggest " + pickedSong.title + " (" + pickedSong.count + ")");
+                console.log("I suggest " + pickedSong.title + " (" + pickedSong.count + ")");
                 yt.search(pickedSong.title,1,function(err,result){
                     if(err){
                         console.log(err);
@@ -162,4 +190,33 @@ var q = [
     {title: "In the aeroplane over the sea neutral milk hotel"}
 ];
 
-module.exports = suggestSong;
+var minSuggestCount = 5;
+function canSuggest(queue,callback){
+    var findSongFunctions = [];
+    for(var i=0;i<queue.length;i++){
+        findSongFunctions.push(searchForTrack(queue[i].title));
+    }
+    async.parallel(findSongFunctions,function(err,results){
+        if(err){
+            return console.log("Error 2: " + err);
+        }
+        var mbid_matches = 0;
+        for(var i=0;i<results.length;i++){
+            if(results[i] && results[i].mbid){
+                mbid_matches++;
+            }
+        }
+
+        console.log(mbid_matches + " musicbrainz matches.");
+
+        if(mbid_matches >= minSuggestCount){
+            callback(null,true);
+        } else {
+            callback(null,false);
+        }
+    });
+}
+
+exports.suggestSong = suggestSong;
+exports.canSuggest = canSuggest;
+exports.searchForTrack = searchForTrack;

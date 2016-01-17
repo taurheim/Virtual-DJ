@@ -48,6 +48,10 @@ socket.on('queue', function (queue) {
     clearQueue();
     currentQueue = queue;
     populateQueue(queue);
+
+    if (!queue.length) {
+        stopPlayingVideo();
+    }
 });
 
 socket.on('lobby', function (lobby) {
@@ -164,6 +168,7 @@ $('document').ready(function () {
         if (e.keyCode == 13) {
             $("#leftBlock").css("display", "inline");
             $("#loginBlock").css("display", "none");
+            $("#queueBlock").show();
             currentUser = $("#username").val();
             socket.emit('join_lobby', currentUser);
         }
@@ -200,8 +205,7 @@ $('document').ready(function () {
         $("#searchBlock").slideToggle();
         $("#queueBlock").show();
         $("#addButtonDiv").show();
-        $("#leftContent").css("height", "80%");
-
+        $("#leftContent").css("height", "85%");
     })
 
     $("#suggestButton").click(function () {

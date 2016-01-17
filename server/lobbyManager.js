@@ -67,7 +67,7 @@ var createLobby = function (lobbyUrl, lobbyName) {
         queueManager.manage(socket, newLobby);
     });
     //Let the socket pay attention to the queue of songs
-    slackbot.setup(io, newLobby, queueManager);
+    slackbot.setup(io, newLobby);
     lobbies.push(newLobby);
 }
 

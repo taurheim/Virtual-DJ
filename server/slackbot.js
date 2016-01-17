@@ -1,9 +1,11 @@
 var SlackBot = require('slackbots');
 var YouTube = require('youtube-node');
 var Song = require("./models/Song");
+var User = require("./models/User");
+var queueManager = require("./queueManager");
 
 
-var setup = function (io, lobby, queueManager) {
+var setup = function (io, lobby) {
 
     var bot = new SlackBot({
         token: 'xoxb-18701644901-gkBNnVEL0GTUWTGCXM9cwvxK',
@@ -19,8 +21,7 @@ var setup = function (io, lobby, queueManager) {
 
     });
     bot.on('message', function (message) {
-        if (message.type == "message" && message.user != "U0JLMJYSH") {
-            console.log(message);
+        if (message.type == "message" && message.user != bot.self.id) {
             var text = message.text;
             //Make a YouTube request using that message
 
@@ -29,16 +30,20 @@ var setup = function (io, lobby, queueManager) {
             youTube.search(text, 5, function (error, result) {
                 var title = result.items[0].snippet.title;
                 var options = {
-                    username: "virtualdj",
                     as_user: true
                 };
                 var newSong = new Song();
                 newSong.title = title;
-                newSong.url = result.items[0].id.videoId
-                    //Tell the user we're adding that song
-                bot.postMessage(message.user, "Adding song: " + title, options, function (data) {
-                    //We succeeded, now tell the lobbyManager to play it
-                    queueManager.addSong(song, io, lobby);
+                newSong.url = result.items[0].id.videoId;
+                //Tell the user we're adding that song
+                bot.postMessage(message.user, "Adding song: " + title,options);
+                
+                //We succeeded, now tell the lobbyManager to play it
+                var DJBot = new User();
+                DJBot.name = "DJBot";
+                DJBot.color = "#000000";
+                queueManager.addSongToLobby(newSong, lobby, DJBot, function(){
+                    console.log("Slack bot successfully added a song.");
                 });
             });
 

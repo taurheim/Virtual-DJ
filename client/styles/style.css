@@ -52,13 +52,14 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
+    width:80%;
     transform: translate(-50%, -50%);
 }
 
 /* Left block*/
 
 #leftContent {
-    height: 80%;
+    height: 85%;
 }
 #leftBlock,
 #loginBlock {
@@ -152,9 +153,16 @@ body {
 
 /* Queue block */
 
+#queueBlock {
+    overflow-y:auto;
+    max-height:100%;
+}
+
 .queueItem {
-    padding-left: 3em;
+    padding-left: 1em;
     padding-top: 0.5em;
+    padding-bottom: 1em;
+    height:40px;
 }
 .queueTitle {
     margin-bottom: 1em;
