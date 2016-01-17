@@ -201,8 +201,7 @@ $('document').ready(function () {
         $("#searchBlock").slideToggle();
         $("#queueBlock").show();
         $("#addButtonDiv").show();
-        $("#leftContent").css("height", "80%");
-
+        $("#leftContent").css("height", "85%");
     })
 
     $("#suggestButton").click(function () {

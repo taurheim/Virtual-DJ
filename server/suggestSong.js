@@ -12,15 +12,17 @@ var lastfm = new LastFmNode({
 });
 
 
-var removeWords = ["(lyrics)","lyrics","(LYRICS)","(Lyrics)"]
+var removeWords = ["lyrics",/\([^)]*\)/, "hq"]
 var searchForTrack = function(keywords){
     return function(callback){
         var newKeywords = keywords;
         for(var i=0;i<removeWords.length;i++){
+            newKeywords = newKeywords.toLowerCase();
+            newKeywords = newKeywords.replace("-"," ");
             newKeywords = newKeywords.replace(removeWords[i],"");
         }
         var request = lastfm.request("track.search", {
-            track: keywords,
+            track: newKeywords,
             limit: 1,
             handlers: {
                 success: function(data) {
@@ -77,7 +79,6 @@ var suggestSong = function(queue,callback){
             return;
         } else {
             console.log("Found " + foundSongs.length + " songs");
-            console.log(foundSongs);
         }
 
         //So that we don't duplicate
@@ -122,8 +123,9 @@ var suggestSong = function(queue,callback){
             var pickBetweenTop = 10;
 
             mostMatched(pickBetweenTop,resultStrings,function(suggestionArray){
+                console.log(suggestionArray);
                 var pickedSong = suggestionArray[Math.floor((Math.random() * pickBetweenTop))];
-                //console.log("I suggest " + pickedSong.title + " (" + pickedSong.count + ")");
+                console.log("I suggest " + pickedSong.title + " (" + pickedSong.count + ")");
                 yt.search(pickedSong.title,1,function(err,result){
                     if(err){
                         console.log(err);
@@ -182,4 +184,33 @@ var q = [
     {title: "In the aeroplane over the sea neutral milk hotel"}
 ];
 
-module.exports = suggestSong;
+var minSuggestCount = 5;
+function canSuggest(queue,callback){
+    var findSongFunctions = [];
+    for(var i=0;i<queue.length;i++){
+        findSongFunctions.push(searchForTrack(queue[i].title));
+    }
+    async.parallel(findSongFunctions,function(err,results){
+        if(err){
+            return console.log("Error: " + err);
+        }
+        var mbid_matches = 0;
+        for(var i=0;i<results.length;i++){
+            if(results[i].mbid){
+                mbid_matches++;
+            }
+        }
+
+        console.log(mbid_matches + " musicbrainz matches.");
+
+        if(mbid_matches >= minSuggestCount){
+            callback(null,true);
+        } else {
+            callback(null,false);
+        }
+    });
+}
+
+exports.suggestSong = suggestSong;
+exports.canSuggest = canSuggest;
+exports.searchForTrack = searchForTrack;

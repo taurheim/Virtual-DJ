@@ -58,7 +58,7 @@ body {
 /* Left block*/
 
 #leftContent {
-    height: 80%;
+    height: 85%;
 }
 #leftBlock,
 #loginBlock {
@@ -152,8 +152,13 @@ body {
 
 /* Queue block */
 
+#queueBlock {
+    overflow-y:auto;
+    max-height:100%;
+}
+
 .queueItem {
-    padding-left: 3em;
+    padding-left: 1em;
     padding-top: 0.5em;
     padding-bottom: 1em;
     height:40px;
