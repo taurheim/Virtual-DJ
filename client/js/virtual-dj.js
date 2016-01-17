@@ -51,14 +51,14 @@ socket.on('queue', function (queue) {
 });
 
 socket.on('lobby', function (lobby) {
-    for(var div in roomDivs){
+    for (var div in roomDivs) {
         $(roomDivs[div]).remove();
     }
     for (var user in lobby) {
         var newUser = $("#userDummy").clone().attr('id', 'roomItem' + user).appendTo("#roomBlock");
         newUser.show();
         newUser.find(".lobbyName").html(lobby[user].name);
-        newUser.find(".lobbyCircle").css("background-color",lobby[user].color);
+        newUser.find(".lobbyCircle").css("background-color", lobby[user].color);
         roomDivs.push(newUser);
     }
 });
@@ -88,7 +88,7 @@ function populateQueue(queue) {
         newQueue.find("button").attr('id', 'removeButton' + i);
         newQueue.find(".queueTitle").text(song.title);
         newQueue.find(".queueArtist").text(song.artist);
-        newQueue.find(".queueUser").text(song.suggested_by.name).css("color",song.suggested_by.color);
+        newQueue.find(".queueUser").text(song.suggested_by.name).css("color", song.suggested_by.color);
         queueDivs.push(newQueue);
         newQueue.find("button").click(function () {
             var idx = $(this).attr('id').split('removeButton')[1];
@@ -107,6 +107,7 @@ function clearQueue() {
 }
 
 function populateSearchResults(results) {
+    clearResults();
     for (i = 0; i < results.items.length; i++) {
 
         var song = new Song(results.items[i].snippet.title,
@@ -132,7 +133,6 @@ function resultClicked(song) {
     $("#leftContent").css("height", "80%");
     $("#searchBlock").show();
     $("#queueBlock").show();
-    console.log(song);
     socket.emit('add_song', song);
     clearResults();
 }
@@ -153,17 +153,17 @@ $('document').ready(function () {
     loadYoutubeAPI();
 
     //Login
-    $("#ok").on("click",function(){
-    	$("#leftBlock").css("display","inline");
-    	$("#loginBlock").css("display","none");
-    	currentUser = $("#username").val();
-    	socket.emit('join_lobby', currentUser);
+    $("#ok").on("click", function () {
+        $("#leftBlock").css("display", "inline");
+        $("#loginBlock").css("display", "none");
+        currentUser = $("#username").val();
+        socket.emit('join_lobby', currentUser);
     });
     //Perform search on Enter
     $('#username').keyup(function (e) {
         if (e.keyCode == 13) {
-            $("#leftBlock").css("display","inline");
-            $("#loginBlock").css("display","none");
+            $("#leftBlock").css("display", "inline");
+            $("#loginBlock").css("display", "none");
             currentUser = $("#username").val();
             socket.emit('join_lobby', currentUser);
         }
@@ -230,6 +230,7 @@ $('document').ready(function () {
                 },
                 //On a success, populate the list
                 success: function (data, textStatus, request) {
+                    console.log(data);
                     response($.map(data[1], function (item) {
                         return {
                             label: item[0],
