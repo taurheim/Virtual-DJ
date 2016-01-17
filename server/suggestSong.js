@@ -36,22 +36,28 @@ var searchForTrack = function(keywords){
     }
 }
 
-var findRelatedSongs = function(mbid){
+var findRelatedSongs = function(track){
     return function(callback){
         //console.log("Finding related songs to: " + mbid);
-        var request = lastfm.request("track.getSimilar", {
-            mbid: mbid,
+
+        var requestParams = {
             handlers: {
                 success: function(data) {
-                    console.log("Found " + data.similartracks.track.length + " songs related to " + mbid);
+                    console.log("Found " + data.similartracks.track.length + " songs related to " + track.name);
                     callback(null,data.similartracks);
                 },
                 error: function(error) {
                     console.log("Error: " + error.message);
                     callback(error);
                 }
-            }
-        });
+            },
+            track: track.name,
+            artist: track.artist
+        };
+        if(track.mbid){
+            requestParams["mbid"] = track.mbid;
+        }
+        var request = lastfm.request("track.getSimilar",requestParams);
     }
 }
 
@@ -66,6 +72,14 @@ var suggestSong = function(queue,callback){
             console.log("ERROR: " + err);
         }
 
+        //Make sure we found at least one song
+        if(!foundSongs.length){
+            return;
+        } else {
+            console.log("Found " + foundSongs.length + " songs");
+            console.log(foundSongs);
+        }
+
         //So that we don't duplicate
         var foundArtists = [];
         var foundSongTitles = [];
@@ -75,9 +89,15 @@ var suggestSong = function(queue,callback){
             if(foundSongs[i] && foundSongs[i].mbid){
                 foundArtists.push(foundSongs[i].artist);
                 foundSongTitles.push(foundSongs[i].name);
-                similarSongFunctions.push(findRelatedSongs(foundSongs[i].mbid));
+                similarSongFunctions.push(findRelatedSongs(foundSongs[i]));
             }
         }
+
+        if(!similarSongFunctions.length){
+            console.log("Couldn't find any songs related to the queue");
+            return;
+        }
+
         async.parallel(similarSongFunctions,function(err,results){
             if(err){
                 console.log("ERROR: " + err);

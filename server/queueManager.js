@@ -24,6 +24,12 @@ var manage = function(socket,lobby){
         for(var i=0;i<lobby.queue.length;i++){
             if(song.url==lobby.queue[i].url){
                 lobby.queue.splice(i,1);
+
+                //If it's the first song, we're going to have to change which song is playing
+                if(i==0 && lobby.queue.length){
+                    lobby.queue[0].time = 0;
+                    lobby.namespace.emit("song",lobby.queue[0]);
+                }
             }
         }
 

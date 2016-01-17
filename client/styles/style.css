@@ -136,6 +136,8 @@ body {
 .queueItem {
     padding-left: 3em;
     padding-top: 0.5em;
+    padding-bottom: 1em;
+    height:40px;
 }
 .queueTitle {
     margin-bottom: 1em;

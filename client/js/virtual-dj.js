@@ -162,6 +162,7 @@ $('document').ready(function () {
         if (e.keyCode == 13) {
             $("#leftBlock").css("display","inline");
             $("#loginBlock").css("display","none");
+            $("#queueBlock").show();
             currentUser = $("#username").val();
             socket.emit('join_lobby', currentUser);
         }
