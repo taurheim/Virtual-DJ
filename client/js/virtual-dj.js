@@ -14,6 +14,20 @@ function handleClientLoad() {
 }
 var socket = io("/default");
 
+//Model for our song
+var Song = function (title, url) {
+    this.title = title;
+    this.url = url;
+}
+
+var currentResults = [];
+var resultsDivs = [];
+var queueDivs = [];
+var currentSong = {};
+
+
+//Socket listeners
+
 socket.on('connect', function () {
     socket.emit('join_lobby', "Guest");
 });
@@ -27,15 +41,11 @@ socket.on('song', function (song) {
     }
 });
 
-//Model for our song
-var Song = function (title, url) {
-    this.title = title;
-    this.url = url;
-}
+socket.on('queue', function (queue) {
+    clearQueue();
+    populateQueue(queue);
+});
 
-var currentResults = [];
-var resultsDivs = [];
-var currentSong = {};
 
 //Makes a request to the Youtube API for a list of videos corresponding to the term
 function youtubeRequest(query) {
@@ -53,8 +63,24 @@ function youtubeRequest(query) {
 
 }
 
+function populateQueue(queue) {
+    for (i = 0; i < queue.length; i++) {
+        console.log(song);
+        var song = queue[i];
+        var newQueue = $("#queueDummy").clone().attr('id', 'queueItem' + i).appendTo("#queueBlock");
+        newQueue.show();
+        newQueue.find(".queueTitle").text(song.title);
+        newQueue.find(".queueArtist").text(song.artist);
+        queueDivs.push(newQueue);
+    }
+}
 
-
+function clearQueue() {
+    for (i = 0; i < queueDivs.length; i++) {
+        queueDivs[0].remove();
+    }
+    queueDivs = [];
+}
 
 function populateSearchResults(results) {
     for (i = 0; i < results.items.length; i++) {
@@ -76,7 +102,6 @@ function populateSearchResults(results) {
     }
 }
 
-
 function resultClicked(song) {
     console.log(song);
     socket.emit('add_song', song);
@@ -92,19 +117,62 @@ function clearResults() {
     $("#youtubeSearch").val('');
 }
 
+
+//jQuery Stuff
+
 $('document').ready(function () {
     loadYoutubeAPI();
 
-    //Called on button press
-    $('#addSongButton').click(function () {
+    //Menu selection buttons
 
-
+    //Queue button
+    $("#item1").on('click', function () {
+        console.log("Working");
+        $("#roomBlock").hide();
+        $("#historyBlock").hide();
+        $("#searchBlock").hide();
+        $("#queueBlock").show();
+    });
+    //Room button
+    $("#item2").on('click', function () {
+        $("#queueBlock").hide();
+        $("#historyBlock").hide();
+        $("#searchBlock").hide();
+        $("#roomBlock").show();
+    });
+    //History button
+    $("#item3").on('click', function () {
+        $("#roomBlock").hide();
+        $("#queueBlock").hide();
+        $("#searchBlock").hide();
+        $("#historyBlock").show();
+    });
+    //Add button
+    $("#addButton").click(function () {
+        $("#searchBlock").slideToggle();
     });
 
+    //Add button
+    $("#addButton").click(function () {
+        $("#searchBlock").slideToggle();
+    });
+
+    $("#suggestButton").click(function () {
+        socket.emit('suggest_song');
+    });
+
+    //Perform search on Enter
+    $('#youtubeSearch').keyup(function (e) {
+        if (e.keyCode == 13) {
+            youtubeRequest($(this).val());
+        }
+    });
+    //Remove a song from the queue
     $('#removeSongButton').click(function () {
         socket.emit('remove_song');
     });
 
+    //Autocomplete for the Youtube search
     $("#youtubeSearch").autocomplete({
         //Populate the suggestions list
         source: function (request, response) {

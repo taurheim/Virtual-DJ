@@ -1,5 +1,6 @@
 body {
     background-color: #232323;
+    font-family: 'Lato', sans-serif;
 }
 #mainBlock {
     height: 90vh;
@@ -28,10 +29,22 @@ body {
     margin-right: 2em;
     background-color: #9c978d;
 }
+.noSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
 
-/* Queue block*/
+/* Left block*/
 
-#queueBlock {
+#leftContent {
+    height: 80%;
+}
+#leftBlock {
     height: 70%;
     width: 29%;
     margin-right: -0.1em;
@@ -39,24 +52,59 @@ body {
     margin-left: 2em;
     background-color: #9c978d;
 }
-#queueMenu {
+#leftMenu {
+    height: 10%;
+    width: 100%;
     background-color: #5b797a;
 }
-.queueMenuItem {
+.leftMenuItem {
     display: inline-block;
-    width: 33%;
+    width: 32.5%;
+    cursor: pointer;
+}
+.leftButton {
+    padding: 0px;
+    background-color: #5b797a;
+    height: 100%;
+    font-size: 1.3em;
+    color: white;
+    font-family: 'Lato', sans-serif;
+}
+#addButtonDiv {
     height: 10%;
-    text-align: center;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+    width: 100%;
+    color: #252525;
+}
+#addButton {
+    font-size: 5vh;
+    float: right;
+}
+#suggestButton {
+    font-size: 5vh;
+    float: left;
 }
 
-/* Search results */
+/* Queue block */
+
+.queueItem {
+    padding-left: 3em;
+    padding-top: 0.5em;
+}
+.queueTitle {
+    margin-bottom: 1em;
+}
+.queueArtist {
+    font-weight: 100;
+}
+.minusButton {
+    float: right;
+}
+
+/* Search block */
 
 #resultsBlock {
     overflow: scroll;
     margin-top: 1em;
-    max-height: 95%;
 }
 .result {
     height: 10em;
@@ -72,3 +120,8 @@ body {
     padding-left: 1em;
     padding-right: 1em;
 }
+
+/* Room block */
+
+
+/* History block */

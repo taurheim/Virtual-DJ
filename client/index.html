@@ -2,6 +2,10 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles/buttons.css">
     <link rel="stylesheet" type="text/css" href="./styles/style.css">
     <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -9,7 +13,7 @@
     <script src="./js/video-player.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <title>Virtual DJ</title>
@@ -17,26 +21,52 @@
 
 <body>
     <div id="mainBlock">
-        <div id="titleBlock">Virtual DJ</div>
+        <div class="noSelect" id="titleBlock">Virtual DJ</div>
         <div id="contentBlock">
             <div id="player"></div>
         </div>
-        <div id="queueBlock">
-            <div id="queueMenu">
-                <div class="queueMenuItem" id="item1">Queue</div>
-                <div class="queueMenuItem" id="item1">Room</div>
-                <div class="queueMenuItem" id="item1">History</div>
-            </div>
-            <input id="youtubeSearch"></input>
-            <button id="addSongButton">Add Song</button>
-            <br>
-            <div id="resultsBlock">
-                <div class="result" id="resultDummy" style="display: none">
-                    <img class="thumbnail" src="https://i.ytimg.com/vi/IS0cxs4TVKM/hqdefault.jpg">
-                    <span class="resultsTitle">Trailer Trash - Modest Mouse</span>
+        <div id="leftBlock">
+            <div id="leftMenu">
+                <div class="leftMenuItem noSelect" id="item1">
+                    <p class="button button-block leftButton">Queue</a>
+                </div>
+                <div class="leftMenuItem noSelect" id="item2">
+                    <p class="button button-block leftButton">Room</a>
+                </div>
+                <div class="leftMenuItem noSelect" id="item3">
+                    <p class="button button-block leftButton">History</a>
                 </div>
             </div>
+            <div id="leftContent">
+                <div id="searchBlock">
+                    <input id="youtubeSearch"></input>
+                    <br>
+                    <div id="resultsBlock">
+                        <div class="result" id="resultDummy" style="display: none">
+                            <img class="thumbnail" src="https://i.ytimg.com/vi/IS0cxs4TVKM/hqdefault.jpg">
+                            <span class="resultsTitle">Trailer Trash - Modest Mouse</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="queueBlock">
+                    <div class="queueItem" id="queueDummy" style="display: none">
+                        <span class="queueTitle">Trailer Trash</span>
+                        <button class="button button-large button-plain button-borderless minusButton"><i class="fa fa-minus-square-o"></i></button>
+                        <br>
+                        <span class="queueArtist">Modest Mouse</span></div>
+                </div>
+                <div id="roomBlock">
+                </div>
+                <div id="historyBlock">
+                </div>
+
+            </div>
+            <div id="addButtonDiv">
+                <button id="addButton" class="button button-large button-plain button-borderless addButton"> <i class="fa fa-plus-circle"></i></button>
+                <button id="suggestButton" class="button button-large button-plain button-borderless addButton"> <i class="fa fa-plus-circle"></i></button>
+            </div>
         </div>
+
     </div>
 </body>
 
