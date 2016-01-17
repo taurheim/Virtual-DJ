@@ -12,7 +12,7 @@ var lastfm = new LastFmNode({
 });
 
 
-var removeWords = ["lyrics",/\([^)]*\)/, "hq"]
+var removeWords = ["lyrics",/\([^)]*\)/, "hq",/\[[^)]*\]/]
 var searchForTrack = function(keywords){
     return function(callback){
         var newKeywords = keywords;

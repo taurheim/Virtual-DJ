@@ -64,6 +64,13 @@ var createLobby = function (lobbyUrl, lobbyName) {
             }
         });
 
+        socket.on("clear_lobby",function(){
+            newLobby.queue = [];
+            newLobby.history = [];
+            //Let everyone know
+            socket.emit("queue", newLobby.queue);
+        });
+
         queueManager.manage(socket, newLobby);
     });
     //Let the socket pay attention to the queue of songs
