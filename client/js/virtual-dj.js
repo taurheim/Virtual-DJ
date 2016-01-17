@@ -20,6 +20,7 @@ var Song = function (title, url) {
     this.url = url;
 }
 
+var currentQueue = [];
 var currentResults = [];
 var resultsDivs = [];
 var queueDivs = [];
@@ -43,6 +44,7 @@ socket.on('song', function (song) {
 
 socket.on('queue', function (queue) {
     clearQueue();
+    currentQueue = queue;
     populateQueue(queue);
 });
 
@@ -69,15 +71,22 @@ function populateQueue(queue) {
         var song = queue[i];
         var newQueue = $("#queueDummy").clone().attr('id', 'queueItem' + i).appendTo("#queueBlock");
         newQueue.show();
+        newQueue.find("button").attr('id', 'removeButton' + i);
         newQueue.find(".queueTitle").text(song.title);
         newQueue.find(".queueArtist").text(song.artist);
         queueDivs.push(newQueue);
+        newQueue.find("button").click(function () {
+            var idx = $(this).attr('id').split('removeButton')[1];
+            socket.emit('remove_song', currentQueue[idx]);
+        });
     }
+
 }
 
 function clearQueue() {
+    $('.queueItem').hide();
     for (i = 0; i < queueDivs.length; i++) {
-        queueDivs[0].remove();
+        queueDivs[i].remove();
     }
     queueDivs = [];
 }
@@ -103,7 +112,8 @@ function populateSearchResults(results) {
 }
 
 function resultClicked(song) {
-    console.log(song);
+    $("#searchBlock").slideToggle();
+    $("#queueBlock").show();
     socket.emit('add_song', song);
     clearResults();
 }
@@ -150,11 +160,9 @@ $('document').ready(function () {
     //Add button
     $("#addButton").click(function () {
         $("#searchBlock").slideToggle();
-    });
-
-    //Add button
-    $("#addButton").click(function () {
-        $("#searchBlock").slideToggle();
+        $("#roomBlock").hide();
+        $("#queueBlock").hide();
+        $("#historyBlock").hide();
     });
 
     $("#suggestButton").click(function () {
@@ -167,10 +175,7 @@ $('document').ready(function () {
             youtubeRequest($(this).val());
         }
     });
-    //Remove a song from the queue
-    $('#removeSongButton').click(function () {
-        socket.emit('remove_song');
-    });
+
 
     //Autocomplete for the Youtube search
     $("#youtubeSearch").autocomplete({
