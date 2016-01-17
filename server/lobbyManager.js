@@ -68,7 +68,7 @@ var createLobby = function (lobbyUrl, lobbyName) {
             newLobby.queue = [];
             newLobby.history = [];
             //Let everyone know
-            socket.emit("queue", newLobby.queue);
+            newLobby.namespace.emit("queue", newLobby.queue);
         });
 
         queueManager.manage(socket, newLobby);
