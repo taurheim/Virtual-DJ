@@ -1,4 +1,6 @@
 var User = function(){
-	this.name = "";
-	this.socket;
+	this.name = "Guest";
+	this.color = "#000000";
 }
+
+module.exports = User;

@@ -136,6 +136,11 @@ body {
 .queueArtist {
     font-weight: 100;
 }
+.queueUser {
+    float:right;
+    font-size:12px;
+}
+
 .minusButton {
     float: right;
 }
@@ -167,6 +172,31 @@ body {
 
 /* Room block */
 
+
+
+.lobbyItem {
+    height:25px;
+    margin:25px 10px;
+    padding:0;
+}
+
+.lobbyCircle {
+    height:40px;
+    width:40px;
+    border-radius:20px;
+    background-color:#fff;
+    display:inline-block;
+    box-shadow: -1px 1px 10px rgba(0, 0, 0, .5)
+}
+
+.lobbyName {
+    display:inline-block;
+    position:relative;
+    bottom:10px;
+    font-size:25px;
+    left:5px;
+    color:#fff;
+}
 
 /* History block */
 

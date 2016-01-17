@@ -1,11 +1,16 @@
+var Song = require("./models/Song");
 var suggestSong = require("./suggestSong");
 
 var manage = function(socket,lobby){
     console.log("Now managing " + lobby.title);
     socket.on("add_song",function(song){
-        song.time = 0;
-        lobby.queue.push(song);
-        console.log("Song added: "+ song.title + " - " + lobby.queue.length);
+        var newSong = new Song();
+        newSong.title = song.title;
+        newSong.url = song.url;
+        newSong.time = 0;
+        newSong.suggested_by = socket.user;
+        lobby.queue.push(newSong);
+        console.log("Song added: "+ newSong.title + " - " + lobby.queue.length);
         //If it's the first song, start playing
         if(lobby.queue.length==1){
             lobby.namespace.emit("song",lobby.queue[0]);

@@ -24,6 +24,7 @@ var currentQueue = [];
 var currentResults = [];
 var resultsDivs = [];
 var queueDivs = [];
+var roomDivs = [];
 var currentSong = {};
 var currentUser = "Guest";
 
@@ -48,26 +49,18 @@ socket.on('queue', function (queue) {
     populateQueue(queue);
 });
 
-socket.on('history', function (history) {
-    clearHistory();
-    populateHistory(history);
-});
-
 socket.on('lobby', function (lobby) {
-    $("#roomBlock").html("");
+    for(var div in roomDivs){
+        $(roomDivs[div]).remove();
+    }
     for (var user in lobby) {
-        $("#roomBlock").append(lobby[user] + "<br/>");
+        var newUser = $("#userDummy").clone().attr('id', 'roomItem' + user).appendTo("#roomBlock");
+        newUser.show();
+        newUser.find(".lobbyName").html(lobby[user].name);
+        newUser.find(".lobbyCircle").css("background-color",lobby[user].color);
+        roomDivs.push(newUser);
     }
 });
-
-function clearHistory() {
-
-}
-
-function populateHistory(history) {
-
-}
-
 
 //Makes a request to the Youtube API for a list of videos corresponding to the term
 function youtubeRequest(query) {
@@ -94,6 +87,7 @@ function populateQueue(queue) {
         newQueue.find("button").attr('id', 'removeButton' + i);
         newQueue.find(".queueTitle").text(song.title);
         newQueue.find(".queueArtist").text(song.artist);
+        newQueue.find(".queueUser").text(song.suggested_by.name).css("color",song.suggested_by.color);
         queueDivs.push(newQueue);
         newQueue.find("button").click(function () {
             var idx = $(this).attr('id').split('removeButton')[1];
@@ -135,7 +129,6 @@ function resultClicked(song) {
     $("#searchBlock").slideToggle();
     $("#queueBlock").show();
     console.log(song);
-    song.user = currentUser;
     socket.emit('add_song', song);
     clearResults();
 }
@@ -154,7 +147,7 @@ function clearResults() {
 
 $('document').ready(function () {
     loadYoutubeAPI();
-    
+
     //Login
     $("#ok").on("click",function(){
     	$("#leftBlock").css("display","inline");

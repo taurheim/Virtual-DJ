@@ -6,4 +6,4 @@ var Song = function() {
 }
 
 
-exports.Song = Song;
+module.exports = Song;
