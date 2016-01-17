@@ -24,12 +24,12 @@ var currentResults = [];
 var resultsDivs = [];
 var queueDivs = [];
 var currentSong = {};
-
+var currentUser = "Guest";
 
 //Socket listeners
 
 socket.on('connect', function () {
-    socket.emit('join_lobby', "Guest");
+    socket.emit('join_lobby', currentUser);
 });
 
 socket.on('song', function (song) {
@@ -45,6 +45,26 @@ socket.on('queue', function (queue) {
     clearQueue();
     populateQueue(queue);
 });
+
+socket.on('history', function(history){
+	clearHistory();
+	populateHistory(history);
+});
+
+socket.on('lobby',function(lobby){
+	$("#roomBlock").html("");
+	for(var user in lobby){
+		$("#roomBlock").append(lobby[user] + "<br/>");
+	}
+});
+
+function clearHistory(){
+
+}
+
+function populateHistory(history) {
+
+}
 
 
 //Makes a request to the Youtube API for a list of videos corresponding to the term
@@ -77,7 +97,7 @@ function populateQueue(queue) {
 
 function clearQueue() {
     for (i = 0; i < queueDivs.length; i++) {
-        queueDivs[0].remove();
+        queueDivs[i].remove();
     }
     queueDivs = [];
 }
@@ -104,6 +124,7 @@ function populateSearchResults(results) {
 
 function resultClicked(song) {
     console.log(song);
+    song.user = currentUser;
     socket.emit('add_song', song);
     clearResults();
 }
@@ -122,6 +143,13 @@ function clearResults() {
 
 $('document').ready(function () {
     loadYoutubeAPI();
+
+    $("#ok").on("click",function(){
+    	$("#leftBlock").css("display","inline");
+    	$("#loginBlock").css("display","none");
+    	currentUser = $("#username").val();
+    	socket.emit('join_lobby', currentUser);
+    });
 
     //Menu selection buttons
 

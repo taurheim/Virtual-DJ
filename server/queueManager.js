@@ -5,7 +5,6 @@ var manage = function(socket,lobby){
     socket.on("add_song",function(song){
         song.time = 0;
         lobby.queue.push(song);
-        console.log(song);
         console.log("Song added: "+ song.title + " - " + lobby.queue.length);
         //If it's the first song, start playing
         if(lobby.queue.length==1){
@@ -37,6 +36,7 @@ var manage = function(socket,lobby){
                 lobby.namespace.emit("song",lobby.queue[0]);
                 console.log("Now playing: " + lobby.queue[0].title);
             }
+            lobby.namespace.emit("history",lobby.history);
             lobby.namespace.emit("queue",lobby.queue);
         }
     });
@@ -45,6 +45,7 @@ var manage = function(socket,lobby){
         console.log("Attempting to suggest a song...");
         suggestSong(lobby.queue, function(newSong){
             console.log("Added song: " + newSong.title + " by " + newSong.artist);
+            newSong.time = 0;
             lobby.queue.push(newSong);
             lobby.namespace.emit("queue",lobby.queue);
         });

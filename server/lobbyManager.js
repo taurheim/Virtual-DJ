@@ -20,9 +20,15 @@ var createLobby = function(lobbyUrl,lobbyName){
     //Join a lobby
     newLobby.namespace.on("connection",function(socket){
         socket.on("join_lobby",function(user){
+            if(socket.user){
+                newLobby.users.splice(newLobby.users.indexOf(socket.user),1);
+                console.log("User changed name to " + user);
+            } else {
+                console.log("User: " + user + " has joined the lobby");
+            }
             socket.user = user;
             newLobby.users.push(user);
-            console.log("User: " + user + " has joined the lobby - " + newLobby.users);
+            
 
             //Let everyone else know
             newLobby.namespace.emit("lobby",newLobby.users);
