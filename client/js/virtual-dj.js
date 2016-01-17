@@ -39,6 +39,7 @@ socket.on('song', function (song) {
         console.log(song);
         currentSong = song;
         playVideo(song.url, song.time);
+        $('#videoTitle').text(song.title);
     }
 });
 
@@ -133,6 +134,7 @@ function populateSearchResults(results) {
 
 function resultClicked(song) {
     $("#searchBlock").slideToggle();
+    $("#addButtonDiv").show();
     $("#leftContent").css("height", "80%");
     $("#searchBlock").show();
     $("#queueBlock").show();
@@ -184,7 +186,9 @@ $('document').ready(function () {
     $("#addButton").click(function () {
         $("#leftContent").css("height", "100%");
         $("#searchBlock").hide();
-        $("#searchBlock").slideToggle();
+        $("#searchBlock").slideToggle(function () {
+            $("#addButtonDiv").hide();
+        });
         $("#roomBlock").hide();
         $("#queueBlock").hide();
     });
@@ -192,6 +196,7 @@ $('document').ready(function () {
     $("#closeButton").click(function () {
         $("#searchBlock").slideToggle();
         $("#queueBlock").show();
+        $("#addButtonDiv").show();
         $("#leftContent").css("height", "80%");
 
     })
