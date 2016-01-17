@@ -27,10 +27,13 @@
             <div id="player"></div>
         </div>
         <div id="loginBlock">
-            Please enter a username to contribute!
-            <br/>
-            <input id="username" type="text" placeholder="Username"></input>
-            <button id="ok" />Join</button>
+            <div id="loginForm">
+                <span class="loginText">
+            	   What's your name?<br/>
+                </span>
+            	<input id="username" type="text"></input>
+            	<button class="button button-rounded" id="ok"/>Join</button>
+            </div>
         </div>
         <div id="leftBlock">
             <div id="leftMenu">
@@ -63,11 +66,18 @@
                         <span class="queueTitle"></span>
                         <button class="button button-large button-plain button-borderless minusButton"><i class="fa fa-minus-square-o"></i></button>
                         <br>
-                        <span class="queueArtist">Artist</span></div>
+                        <span class="queueArtist">Artist</span>
+                        <span class="queueUser">User</span>
+                    </div>
                 </div>
                 <div id="roomBlock" style='display: none'>
-                </div>
-                <div id="historyBlock" style='display: none'>
+                    <div class="lobbyItem" id="userDummy" style="display:none">
+                        <div class="lobbyCircle">
+                        </div>
+                        <div class="lobbyName">
+                            Name
+                        </span>
+                    </div>
                 </div>
             </div>
             <div id="addButtonDiv">
