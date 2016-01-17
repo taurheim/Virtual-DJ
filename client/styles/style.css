@@ -44,7 +44,8 @@ body {
 #leftContent {
     height: 80%;
 }
-#leftBlock {
+#leftBlock,
+#loginBlock {
     height: 70%;
     width: 29%;
     margin-right: -0.1em;
@@ -52,13 +53,16 @@ body {
     margin-left: 2em;
     background-color: #9c978d;
 }
+#leftBlock {
+    display: none;
+}
 #leftMenu {
     width: 100%;
     background-color: #5b797a;
 }
 .leftMenuItem {
     display: inline-block;
-    width: 32.8%;
+    width: 49%;
     cursor: pointer;
 }
 .leftButton {

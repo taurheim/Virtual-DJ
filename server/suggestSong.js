@@ -12,19 +12,23 @@ var lastfm = new LastFmNode({
 });
 
 
-
+var removeWords = ["(lyrics)","lyrics","(LYRICS)","(Lyrics)"]
 var searchForTrack = function(keywords){
     return function(callback){
+        var newKeywords = keywords;
+        for(var i=0;i<removeWords.length;i++){
+            newKeywords = newKeywords.replace(removeWords[i],"");
+        }
         var request = lastfm.request("track.search", {
             track: keywords,
             limit: 1,
             handlers: {
                 success: function(data) {
-                    //console.log("Found: " + keywords + " --> " + data.results.trackmatches.track[0].mbid);
+                    console.log("Found: " + newKeywords + " --> " + data.results.trackmatches.track[0].mbid);
                     callback(null,data.results.trackmatches.track[0]);
                 },
                 error: function(error) {
-                    //console.log("Error: " + error.message);
+                    console.log("Error: " + error.message);
                     callback(error);
                 }
             }
@@ -39,7 +43,7 @@ var findRelatedSongs = function(mbid){
             mbid: mbid,
             handlers: {
                 success: function(data) {
-                    //console.log("Found " + data.similartracks.track.length + " songs related to " + mbid);
+                    console.log("Found " + data.similartracks.track.length + " songs related to " + mbid);
                     callback(null,data.similartracks);
                 },
                 error: function(error) {
@@ -68,7 +72,7 @@ var suggestSong = function(queue,callback){
 
         var similarSongFunctions = [];
         for(var i=0;i<foundSongs.length;i++){
-            if(foundSongs[i]){
+            if(foundSongs[i] && foundSongs[i].mbid){
                 foundArtists.push(foundSongs[i].artist);
                 foundSongTitles.push(foundSongs[i].name);
                 similarSongFunctions.push(findRelatedSongs(foundSongs[i].mbid));
