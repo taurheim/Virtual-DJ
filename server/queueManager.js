@@ -41,8 +41,10 @@ var manage = function(socket,lobby){
         }
     });
 
-    socket.on("suggest",function(){
+    socket.on("suggest_song",function(){
+        console.log("Attempting to suggest a song...");
         suggestSong(lobby.queue, function(newSong){
+            console.log("Added song: " + newSong.title + " by " + newSong.artist);
             lobby.queue.push(newSong);
             lobby.namespace.emit("queue",lobby.queue);
         });
