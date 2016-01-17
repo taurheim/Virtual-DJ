@@ -212,6 +212,11 @@ $('document').ready(function () {
         socket.emit('suggest_song');
     });
 
+    $("#clearButton").click(function(){
+        console.log("Attempting to clear lobby");
+        socket.emit('clear_lobby');
+    });
+
     //Perform search on Enter
     $('#youtubeSearch').keyup(function (e) {
         if (e.keyCode == 13) {

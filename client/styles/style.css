@@ -109,6 +109,9 @@ body {
 #suggestButton {
     float: left;
 }
+#clearButton {
+    float:left;
+}
 
 /* Login block */
 
