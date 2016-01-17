@@ -20,6 +20,7 @@ var Song = function (title, url) {
     this.url = url;
 }
 
+var currentQueue = [];
 var currentResults = [];
 var resultsDivs = [];
 var queueDivs = [];
@@ -43,22 +44,23 @@ socket.on('song', function (song) {
 
 socket.on('queue', function (queue) {
     clearQueue();
+    currentQueue = queue;
     populateQueue(queue);
 });
 
-socket.on('history', function(history){
-	clearHistory();
-	populateHistory(history);
+socket.on('history', function (history) {
+    clearHistory();
+    populateHistory(history);
 });
 
-socket.on('lobby',function(lobby){
-	$("#roomBlock").html("");
-	for(var user in lobby){
-		$("#roomBlock").append(lobby[user] + "<br/>");
-	}
+socket.on('lobby', function (lobby) {
+    $("#roomBlock").html("");
+    for (var user in lobby) {
+        $("#roomBlock").append(lobby[user] + "<br/>");
+    }
 });
 
-function clearHistory(){
+function clearHistory() {
 
 }
 
@@ -89,13 +91,20 @@ function populateQueue(queue) {
         var song = queue[i];
         var newQueue = $("#queueDummy").clone().attr('id', 'queueItem' + i).appendTo("#queueBlock");
         newQueue.show();
+        newQueue.find("button").attr('id', 'removeButton' + i);
         newQueue.find(".queueTitle").text(song.title);
         newQueue.find(".queueArtist").text(song.artist);
         queueDivs.push(newQueue);
+        newQueue.find("button").click(function () {
+            var idx = $(this).attr('id').split('removeButton')[1];
+            socket.emit('remove_song', currentQueue[idx]);
+        });
     }
+
 }
 
 function clearQueue() {
+    $('.queueItem').hide();
     for (i = 0; i < queueDivs.length; i++) {
         queueDivs[i].remove();
     }
@@ -123,6 +132,8 @@ function populateSearchResults(results) {
 }
 
 function resultClicked(song) {
+    $("#searchBlock").slideToggle();
+    $("#queueBlock").show();
     console.log(song);
     song.user = currentUser;
     socket.emit('add_song', song);
@@ -143,6 +154,7 @@ function clearResults() {
 
 $('document').ready(function () {
     loadYoutubeAPI();
+    
     //Login
     $("#ok").on("click",function(){
     	$("#leftBlock").css("display","inline");
@@ -187,11 +199,9 @@ $('document').ready(function () {
     //Add button
     $("#addButton").click(function () {
         $("#searchBlock").slideToggle();
-    });
-
-    //Add button
-    $("#addButton").click(function () {
-        $("#searchBlock").slideToggle();
+        $("#roomBlock").hide();
+        $("#queueBlock").hide();
+        $("#historyBlock").hide();
     });
 
     $("#suggestButton").click(function () {
@@ -204,10 +214,7 @@ $('document').ready(function () {
             youtubeRequest($(this).val());
         }
     });
-    //Remove a song from the queue
-    $('#removeSongButton').click(function () {
-        socket.emit('remove_song');
-    });
+
 
     //Autocomplete for the Youtube search
     $("#youtubeSearch").autocomplete({
