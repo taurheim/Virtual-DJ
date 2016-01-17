@@ -1,18 +1,18 @@
 var youtubeAPILoaded = false;
 var currentVideo = null;
 
-function playVideo(videoId,startTime){
-    if(!youtubeAPILoaded){
+function playVideo(videoId, startTime) {
+    if (!youtubeAPILoaded) {
         console.log("Youtube API not ready yet");
         loadYoutubeAPI();
-        setTimeout(function(){
-            playVideo(videoId,startTime);
-        },1000);
-    } else if(currentVideo){
-        currentVideo.loadVideoById(videoId,startTime);
+        setTimeout(function () {
+            playVideo(videoId, startTime);
+        }, 1000);
+    } else if (currentVideo) {
+        currentVideo.loadVideoById(videoId, startTime);
     } else {
         currentVideo = new YT.Player('player', {
-            height: '100%',
+            height: '90%',
             width: '100%',
             videoId: videoId,
             playerVars: {
@@ -27,8 +27,8 @@ function playVideo(videoId,startTime){
     }
 }
 
-function videoEnded(){
-    socket.emit("song_ended",currentSong);
+function videoEnded() {
+    socket.emit("song_ended", currentSong);
 }
 
 function onYouTubeIframeAPIReady() {
@@ -37,15 +37,15 @@ function onYouTubeIframeAPIReady() {
 }
 
 //Disable pausing
-function onPlayerStateChange(event){
-    if(event.data == YT.PlayerState.PAUSED) {
-        currentVideo.playVideo();    
-    } else if(event.data == YT.PlayerState.ENDED){
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PAUSED) {
+        currentVideo.playVideo();
+    } else if (event.data == YT.PlayerState.ENDED) {
         videoEnded();
     }
 }
 
-function loadYoutubeAPI(){
+function loadYoutubeAPI() {
     var tag = document.createElement('script');
 
     tag.src = "https://www.youtube.com/iframe_api";
